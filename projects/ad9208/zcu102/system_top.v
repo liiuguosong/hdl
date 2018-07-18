@@ -80,6 +80,7 @@ module system_top (
   wire            rx_ref_clk;
   wire            rx_core_clk;
   wire            rx_sysref;
+  wire            rx_sysref_s;
   wire            rx_sync;
 
   assign gpio_i[94:37] = gpio_o[94:37];
@@ -101,7 +102,7 @@ module system_top (
   IBUFDS i_ibufds_rx_sysref (
     .I (rx_sysref_p),
     .IB (rx_sysref_n),
-    .O (rx_sysref));
+    .O (rx_sysref_s));
 
   OBUFDS i_obufds_rx_sync (
     .I (rx_sync),
@@ -112,6 +113,18 @@ module system_top (
     .I (rx_core_clk_n),
     .IB (rx_core_clk_p),
     .O (rx_core_clk));
+
+  IDDRE1 #(
+    .DDR_CLK_EDGE("OPPOSITE_EDGE"),
+    .IS_CB_INVERTED(1),
+    .IS_C_INVERTED(1'b0)
+  ) iddre1_sysref (
+    .Q1(rx_sysref),
+    .Q2(),
+    .C(rx_core_clk),
+    .CB(rx_core_clk),
+    .D(rx_sysref_s),
+    .R(1'b0));
 
   ad_iobuf #(.DATA_WIDTH(5)) i_iobuf (
     .dio_t ({gpio_t[36:32]}),

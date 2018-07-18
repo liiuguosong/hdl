@@ -47,3 +47,8 @@ set_property  -dict {PACKAGE_PIN  K34} [get_ports rx_data_n[7]] ; ## A19 FMC_HPC
 
 create_clock -name rx_ref_clk   -period  1.33 [get_ports rx_ref_clk_p]
 create_clock -name rx_core_clk  -period  2.66 [get_ports rx_core_clk_p]
+
+set_false_path -setup -rise_from [get_clocks rx_core_clk] -fall_to [get_clocks rx_core_clk]
+set_false_path -setup -fall_from [get_clocks rx_core_clk] -rise_to [get_clocks rx_core_clk]
+set_false_path -hold  -rise_from [get_clocks rx_core_clk] -rise_to [get_clocks rx_core_clk]
+set_false_path -hold  -fall_from [get_clocks rx_core_clk] -fall_to [get_clocks rx_core_clk]
