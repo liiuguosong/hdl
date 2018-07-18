@@ -82,7 +82,7 @@ module system_top (
   wire            rx_sysref_s;
   wire            rx_sync;
 
-  assign spi_miso = spi_sdo_adt7320 | spi_miso_adc;
+  assign spi_miso = | ({spi_sdo_adt7320, spi_miso_adc, spi_miso_adc} & ~spi_csn);
   assign spi_mosi_adc = spi_mosi;
   assign spi_sdi_adt7320 = spi_mosi;
   assign spi_clk_adt7320 = spi_clk;
