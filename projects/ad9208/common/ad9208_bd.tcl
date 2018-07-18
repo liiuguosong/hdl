@@ -66,10 +66,8 @@ ad_connect  sys_cpu_clk util_ad9208_xcvr/up_clk
 
 # connections (adc)
 
-ad_xcvrcon  util_ad9208_xcvr axi_ad9208_xcvr axi_ad9208_jesd
-disconnect_bd_net /util_ad9208_xcvr_rx_out_clk_0 [get_bd_pins util_ad9208_xcvr/rx_out_clk_0]
+ad_xcvrcon  util_ad9208_xcvr axi_ad9208_xcvr axi_ad9208_jesd {} rx_core_clk
 ad_connect  rx_core_clk axi_ad9208_core/rx_clk
-ad_connect  rx_core_clk util_ad9208_xcvr/rx_clk_0
 ad_connect  axi_ad9208_jesd/rx_data_tdata axi_ad9208_core/rx_data
 ad_connect  axi_ad9208_jesd/rx_sof axi_ad9208_core/rx_sof
 
@@ -91,8 +89,8 @@ ad_connect sys_dma_rstgen/ext_reset_in sys_rstgen/peripheral_aresetn
 ad_connect ad9208_cpack/adc_data axi_ad9208_fifo/adc_wdata
 ad_connect ad9208_cpack/adc_valid axi_ad9208_fifo/adc_wr
 ad_connect axi_ad9208_fifo/adc_clk axi_ad9208_core/adc_clk
-ad_connect axi_ad9208_jesd_rstgen/peripheral_reset ad9208_cpack/adc_rst
-ad_connect axi_ad9208_fifo/adc_rst axi_ad9208_jesd_rstgen/peripheral_reset
+ad_connect rx_core_clk_rstgen/peripheral_reset ad9208_cpack/adc_rst
+ad_connect axi_ad9208_fifo/adc_rst rx_core_clk_rstgen/peripheral_reset
 ad_connect axi_ad9208_dma/s_axis_ready axi_ad9208_fifo/dma_wready
 ad_connect axi_ad9208_dma/s_axis_valid axi_ad9208_fifo/dma_wr
 ad_connect axi_ad9208_dma/s_axis_data axi_ad9208_fifo/dma_wdata
