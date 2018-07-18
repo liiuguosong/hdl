@@ -64,9 +64,9 @@ module system_top (
 
   output          spi_csn_adc,
   output          spi_csn_vref,
-  output          spi_clk,
-  input           spi_miso,
-  output          spi_mosi);
+  output          spi_clk_adc,
+  input           spi_miso_adc,
+  output          spi_mosi_adc);
 
 
   // internal signals
@@ -76,19 +76,24 @@ module system_top (
   wire    [94:0]  gpio_t;
   wire    [20:0]  gpio_bd;
   wire    [ 2:0]  spi_csn;
-  wire    [ 2:0]  spi1_csn;
   wire            rx_ref_clk;
   wire            rx_core_clk;
   wire            rx_sysref;
   wire            rx_sysref_s;
   wire            rx_sync;
 
+  assign spi_miso = spi_sdo_adt7320 | spi_miso_adc;
+  assign spi_mosi_adc = spi_mosi;
+  assign spi_sdi_adt7320 = spi_mosi;
+  assign spi_clk_adt7320 = spi_clk;
+  assign spi_clk_adc = spi_clk;
+
   assign gpio_i[94:37] = gpio_o[94:37];
   assign gpio_i[31:21] = gpio_o[31:21];
 
-  assign spi_csb_adt7320 = spi1_csn[0];
   assign spi_csn_adc = spi_csn[0];
   assign spi_csn_vref = spi_csn[1];
+  assign spi_csb_adt7320 = spi_csn[2];
 
   // instantiations
 
@@ -187,10 +192,10 @@ system_wrapper i_system_wrapper (
   .spi0_miso (spi_miso),
   .spi0_mosi (spi_mosi),
   .spi0_sclk (spi_clk),
-  .spi1_csn (spi1_csn),
-  .spi1_miso (spi_sdo_adt7320),
-  .spi1_mosi (spi_sdi_adt7320),
-  .spi1_sclk (spi_clk_adt7320)); 
+  .spi1_csn (),
+  .spi1_miso (1'b0),
+  .spi1_mosi (),
+  .spi1_sclk ()); 
 
 endmodule
 
