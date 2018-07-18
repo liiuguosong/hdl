@@ -39,22 +39,27 @@ module ad_rst (
 
   // clock reset
 
-  input                   preset,
+  input                   rst_async,
   input                   clk,
-  output  reg             rst);
+  output  reg             rstn,
+  output                  rst);
 
   // internal registers
 
-  reg             ad_rst_sync_m1 = 'd0 /* synthesis preserve */;
   reg             ad_rst_sync = 'd0 /* synthesis preserve */;
 
-  // simple reset gen
+  // simple reset synchronizer
 
-  always @(posedge clk) begin
-    ad_rst_sync_m1 <= preset;
-    ad_rst_sync <= ad_rst_sync_m1;
-    rst <= ad_rst_sync;
+  always @(posedge clk or posedge rst_async) begin
+    if (rst_async) begin
+      ad_rst_sync <= 1'b0;
+      rstn <= 1'b0;
+    end else begin
+      ad_rst_sync <= 1'b1;
+      rstn <= ad_rst_sync;
+    end
   end
+  assign rst = ~rstn;
 
 endmodule
 
