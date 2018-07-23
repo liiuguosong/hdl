@@ -12,7 +12,7 @@ adi_project_files adrv9371x_kcu105 [list \
   "$ad_hdl_dir/projects/common/kcu105/kcu105_system_lutram_constr.xdc" ]
 
 ## To improve timing in DDR4 MIG
-set_property strategy Performance_Explore [get_runs impl_1]
+set_property strategy Performance_Retiming [get_runs impl_1]
 
 adi_project_run adrv9371x_kcu105
 
